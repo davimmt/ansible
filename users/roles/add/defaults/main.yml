@@ -1,0 +1,6 @@
+---
+users:
+  - { name: 'davimmt', groups: 'wheel', ssh_key: 'ssh-rsa lorem' }
+  - { name: 'ansible_child', groups: '', ssh_key: 'ssh-rsa lorem' }
+  - { name: 'pedro', groups: 'app', ssh_key: 'ssh-rsa lorem' }
+  - { name: 'alex', groups: 'app', ssh_key: 'ssh-rsa lorem' }

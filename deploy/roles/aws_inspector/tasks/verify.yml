@@ -1,0 +1,12 @@
+- name: Download AWS Inspector GPG
+  get_url:
+    url: https://d1wk0tztpsntt1.cloudfront.net/linux/latest/inspector.gpg
+    dest: /tmp/awsinspector_gpg
+
+- name: Copy AWS Inspector key
+  template:
+    src: inspector.j2
+    dest: /tmp/inspector.key
+
+- name: Import GPG inspector key
+  shell: cd /tmp && gpg --import inspector.key

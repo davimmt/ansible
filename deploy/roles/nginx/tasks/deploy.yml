@@ -1,0 +1,14 @@
+---
+- name: Deploy root configuration files
+  loop: "{{ configuration_to_deploy }}"
+  copy:
+    src: "{{ item }}"
+    dest: /etc/nginx/
+    
+- name: Deploy server blocks
+  loop: "{{ templates_to_deploy }}"
+  when: templates_to_deploy[0] != '0'
+  notify: Reload NGINX
+  template:
+    src: "{{ item | replace('.conf', '.j2') }}"
+    dest: "/etc/nginx/conf.d/{{ item }}"

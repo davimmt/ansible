@@ -1,0 +1,13 @@
+---
+- name: Download AWS Inspector agent
+  get_url:
+    url: https://inspector-agent.amazonaws.com/linux/latest/install
+    dest: /tmp/awsinspector
+    mode: +x
+
+- name: Install AWS Inspector agent
+  shell: cd /tmp && ./awsinspector
+
+- name: Trigger AWS Inspector agent service start
+  command: /bin/true
+  notify: Start AWS Inspector agent service

@@ -1,0 +1,38 @@
+---
+- name: add | Cheking if user is at the wheel group
+  loop: "{{ users | flatten(1) }}"
+  when: "'wheel' in item.groups and item.state == 'present'"
+  command: echo 
+  notify: wheel group
+
+- name: add | Creating primary users group
+  loop: "{{ users | flatten(1) }}"
+  when: item.state == 'present'
+  group:
+    name: "{{ item.name }}"
+    state: present
+
+- name: add | Creating other users group
+  loop: "{{ users | flatten(1) }}"
+  when: item.groups is defined and (item.groups | length > 0) and item.state == 'present' 
+  group: 
+    name: "{{ item.groups }}"
+    state: present
+
+- name: add | Creating user
+  loop: "{{ users | flatten(1) }}"
+  when: item.state == 'present'
+  user:
+    name: "{{ item.name }}"
+    group: "{{ item.name }}"
+    groups: "{{ item.groups }}"
+    shell: /bin/bash 
+    password_lock: yes
+    state: present
+
+- name: add | Authorizing users SSH key
+  loop: "{{ users | flatten(1) }}"
+  when: item.state == 'present'
+  authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.ssh_key }}"

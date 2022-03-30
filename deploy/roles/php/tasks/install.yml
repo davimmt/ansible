@@ -1,0 +1,17 @@
+---
+- name: Enable PHP with amazon-linux-extras
+  command: amazon-linux-extras enable php8.0
+
+- name: Download PHP
+  yum:
+    name: php
+    state: installed
+
+- name: Download PHP FPM
+  yum:
+    name: php-fpm
+    state: installed
+
+- name: Trigger PHP FPM start
+  command: /bin/true
+  notify: Start PHP FPM

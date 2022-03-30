@@ -1,0 +1,8 @@
+---
+- name: Enable PostgreSQL with amazon-linux-extras
+  command: amazon-linux-extras enable postgresql13
+
+- name: Download PostgreSQL
+  yum:
+    name: postgresql
+    state: installed

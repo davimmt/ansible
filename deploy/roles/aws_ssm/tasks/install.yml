@@ -1,0 +1,9 @@
+---
+- name: Download AWS SSM
+  yum:
+    name: ssm
+    state: installed
+
+- name: Trigger AWS SSM start
+  command: /bin/true
+  notify: Start AWS SSM

@@ -1,0 +1,12 @@
+---
+- name: Download and extract Craft CMS
+  unarchive:
+    src: "{{ craft_cms_url }}"
+    dest: "{{ install_path }}/{{ domain }}"
+    remote_src: yes
+
+- name: Download dependencies
+  loop: "{{ dependencies }}"
+  yum:
+    name: "{{ item }}"
+    state: installed

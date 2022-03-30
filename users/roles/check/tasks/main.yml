@@ -1,0 +1,28 @@
+---
+- name: Checking user existence
+  getent:
+    database: passwd
+    key: "{{ cli_name }}"
+    fail_key: False
+
+- name: Checking users group existence
+  register: output_group
+  getent:
+    database: group
+    key: "{{ cli_name }}"
+    fail_key: False
+
+- name: Manipulating getent output
+  set_fact:
+    existing_user: "{{ getent_passwd | dict2items }}"
+    existing_group: "{{ getent_group | dict2items }}"
+
+- name: Displaying output from hosts with the choosen user
+  when: existing_user[0].value is iterable
+  debug:
+    msg: "Hello from user {{ existing_user[0].key }}!"
+
+- name: Displaying output from hosts with the choosen users group
+  when: existing_group[0].value is iterable
+  debug:
+    msg: "Hello from users group {{ existing_group[0].key }}!"

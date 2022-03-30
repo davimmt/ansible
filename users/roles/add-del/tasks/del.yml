@@ -1,0 +1,16 @@
+---
+- name: del | Removing user
+  loop: "{{ users | flatten(1) }}"
+  when: item.state == 'absent'
+  user:
+    name: "{{ item.name }}"
+    state: absent
+    remove: yes 
+    force: yes
+
+- name: del | Removing users group
+  loop: "{{ users | flatten(1) }}"
+  when: item.state == 'absent'
+  group: 
+    name: "{{ item.name }}"
+    state: absent

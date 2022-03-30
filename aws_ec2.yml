@@ -1,0 +1,30 @@
+---
+plugin: aws_ec2
+
+regions:
+  - sa-east-1
+
+keyed_groups:
+  - key: tags.Name
+    prefix: ''
+    separator: ''
+  - key: tags.Environment
+    prefix: Environment
+
+groups:
+  dev: "'DEV' in (tags|list)"
+  hom: "'HOM' in (tags|list)"
+  prd: "'PRD' in (tags|list)"
+
+hostnames:
+  - network-interface.addresses.private-ip-address
+
+filters:
+  instance-state-name: running
+
+exclude_filters:
+  - platform:
+    - 'windows'
+
+compose:
+  ansible_host: private_ip_addess

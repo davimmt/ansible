@@ -1,0 +1,15 @@
+---
+- name: Start AWS Inspector agent service
+  service:
+    name: awsagent
+    state: started
+
+- name: Restart AWS Inspector agent service
+  service:
+    name: awsagent
+    state: restarted
+
+- name: Stop AWS Inspector agent service
+  service:
+    name: awsagent
+    state: stopped

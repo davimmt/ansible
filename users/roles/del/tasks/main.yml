@@ -1,0 +1,14 @@
+---
+- name: Removing user
+  loop: "{{ users }}"
+  user: 
+    name: "{{ item }}" 
+    state: absent 
+    remove: yes 
+    force: yes
+
+- name: Removing users group
+  loop: "{{ users }}"
+  group: 
+    name: "{{ item }}" 
+    state: absent

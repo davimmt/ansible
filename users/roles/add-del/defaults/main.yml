@@ -1,0 +1,6 @@
+---
+users:
+  - { state: 'present', name: 'davimmt', groups: 'wheel', ssh_key: 'ssh-rsa lorem' }
+  - { state: 'present', name: 'ansible_child', groups: '', ssh_key: 'ssh-rsa lorem' }
+  - { state: 'absent', name: 'pedro', groups: 'app', ssh_key: 'ssh-rsa lorem' }
+  - { state: 'absent', name: 'alex', groups: 'app', ssh_key: 'ssh-rsa lorem' }

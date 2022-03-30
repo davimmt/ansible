@@ -1,0 +1,15 @@
+---
+- name: Start AWS SSM
+  service:
+    name: amazon-ssm-agent
+    state: started
+
+- name: Restart AWS SSM
+  service:
+    name: amazon-ssm-agent
+    state: restarted
+
+- name: Stop AWS SSM
+  service:
+    name: amazon-ssm-agent
+    state: stopped

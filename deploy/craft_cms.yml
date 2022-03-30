@@ -1,0 +1,30 @@
+---
+- hosts: "{{ cli_hosts | default('all') }}"
+  become: true
+  gather_facts: no
+  vars:
+    - install_path: /home/sftp/home
+    - install_owner: sftp
+    - domain: domain.example
+    - DB_: {
+        "DRIVER": pgsql,
+        "SERVER": domain.example,
+        "PORT": 5432,
+        "DATABASE": example,
+        "USER": example,
+        "SCHEMA": "public",
+        "TABLE_PREFIX": ""
+      }
+  vars_prompt:
+    - name: DB_PASSWORD
+      prompt: DB_PASSWORD
+  roles:
+    - nginx
+    - php
+    - pgsql-client
+    - craft_cms
+
+  tasks:
+    - name: Trigger PHP FPM restart
+      command: /bin/true
+      notify: Restart PHP FPM

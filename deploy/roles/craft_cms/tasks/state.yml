@@ -1,0 +1,5 @@
+---
+- name: Ensure {{ install_path }}/{{ domain }} folder exists
+  file:
+    path: "{{ install_path }}/{{ domain }}"
+    state: directory

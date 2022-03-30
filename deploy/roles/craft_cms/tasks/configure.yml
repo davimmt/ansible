@@ -1,0 +1,34 @@
+---
+- name: Configure .env DB_ variables
+  loop: "{{ DB_ | flatten(1) }}"
+  command: sed -i 's/DB_{{ item }}=.*/DB_{{ item }}={{ DB_[item] }}/g' {{ install_path }}/{{ domain }}/.env
+
+- name: Configure .env DB_PASSWORD
+  command: sed -i 's/DB_PASSWORD=.*/DB_PASSWORD={{ DB_PASSWORD }}/g' {{ install_path }}/{{ domain }}/.env
+
+- name: Set a Security Key
+  command: 
+    cmd: php craft setup/security-key
+    chdir: "{{ install_path }}/{{ domain }}"
+
+- name: Set correct permissions to {{ install_path }}/{{ domain }} folder
+  file:
+    path: "{{ install_path }}/{{ domain }}"
+    owner: "{{ install_owner }}"
+    group: nginx
+    mode: 0775
+    recurse: yes
+
+- name: Set correct permissions on {{ php_session_folder }} folder
+  file:
+    path:  "{{ php_session_folder }}"
+    owner: root
+    group: nginx
+    mode: 0770
+    recurse: yes
+
+- name: Set correct user & group at {{ php_fpm_conf }}
+  with_items:
+    - user
+    - group
+  command: sed -i 's/^{{ item }} =.*/{{ item }} = nginx/g' {{ php_fpm_conf }}

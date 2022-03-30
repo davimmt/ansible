@@ -1,0 +1,6 @@
+---
+users: 
+  - 'ansible_child'
+  - 'davimmt'
+  - 'pedro'
+  - 'alex'

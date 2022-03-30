@@ -1,0 +1,20 @@
+# ansible-galaxy collection install community.general
+# ansible-galaxy collection install ansible.posix
+# ansible-galaxy collection install community.zabbix
+# ansible-galaxy install geerlingguy.apache
+
+---
+- hosts: "{{ cli_hosts | default('all') }}"
+  become: true
+  pre_tasks:
+    - name: Ensure PHP-FPM is installed
+      apt:
+        name: php-fpm
+        state: present
+  roles:
+    - role: geerlingguy.apache
+    - role: community.zabbix.zabbix_web
+      zabbix_api_server_url: domain.example
+      zabbix_server_database: mysql
+      zabbix_server_database_long: mysql
+      zabbix_server_dbport: 3306

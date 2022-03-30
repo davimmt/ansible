@@ -1,0 +1,10 @@
+---
+dependencies: 
+  - php-mbstring
+  - php-pgsql
+  - php-xml
+  - php-pecl-imagick
+
+craft_cms_url: https://craftcms.com/latest-v3.tar.gz
+php_fpm_conf: /etc/php-fpm.d/www.conf
+php_session_folder: /var/lib/php/session

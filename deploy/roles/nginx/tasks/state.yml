@@ -1,0 +1,30 @@
+---
+- name: Enable NGINX with amazon-linux-extras
+  command: amazon-linux-extras enable nginx1
+
+- name: Ensure NGINX is installed
+  yum:
+    name: nginx
+    state: installed
+
+# - name: Trigger NGINX start
+#   command: /bin/true
+#   notify: Start NGINX
+
+- name: Ensure /etc/nginx/conf.d exists
+  file:
+    path: /etc/nginx/conf.d
+    state: directory
+
+- name: Ensure /etc/nginx/default.d exists
+  file:
+    path: /etc/nginx/default.d
+    state: directory
+
+- name: Set correct permissions to /usr/share/nginx folder
+  file:
+    path: /usr/share/nginx
+    owner: root
+    group: nginx
+    mode: 0775
+    recurse: yes
