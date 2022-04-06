@@ -1,20 +1,35 @@
-# ansible-galaxy collection install community.general
-# ansible-galaxy collection install ansible.posix
-# ansible-galaxy collection install community.zabbix
-# ansible-galaxy install geerlingguy.apache
+# https://github.com/ansible-collections/community.zabbix/tree/main/roles/zabbix_web
 
 ---
 - hosts: "{{ cli_hosts | default('all') }}"
   become: true
-  pre_tasks:
-    - name: Ensure PHP-FPM is installed
-      apt:
-        name: php-fpm
-        state: present
+  vars_prompt:
+  - name: p_zabbix_server_dbpassword
+    prompt: p_zabbix_server_dbpassword
   roles:
     - role: geerlingguy.apache
+    - role: geerlingguy.php
+      php_packages:
+        - php
+        - php-fpm
+    - role: geerlingguy.apache-php-fpm
     - role: community.zabbix.zabbix_web
-      zabbix_api_server_url: domain.example
+      # Webhost
+      zabbix_web_version: 5.0
+      zabbix_api_server_url: monitor.preventsenior.com.br
+      # DB
       zabbix_server_database: mysql
       zabbix_server_database_long: mysql
       zabbix_server_dbport: 3306
+      zabbix_server_dbhost: mysql-zabbix-prod.preventsenior.com.br
+      zabbix_server_dbname: zabbix
+      zabbix_server_dbuser: zabbix
+      zabbix_server_dbpassword: "{{ p_zabbix_server_dbpassword }}"
+      # Server
+      zabbix_server_hostname: 10.0.10.81
+      zabbix_server_name: Monitor
+  tasks:
+    - name: Remove single-quotes from boolean values at /etc/zabbix/web/zabbix.conf.php
+      shell: sed -ri "s/'(false|true)'/\1/" /etc/zabbix/web/zabbix.conf.php
+    - name: Add info to /etc/zabbix/web/zabbix.conf.php
+      shell: sed -ri "s/(\?>)/\$DB['DOUBLE_IEEE754'] = true;\n\$DB['KEY_FILE'] = '';\n\$DB['CERT_FILE'] = '';\n\$DB['CA_FILE'] = '';\n\$DB['CIPHER_LIST'] = '';\n\n\1/" /etc/zabbix/web/zabbix.conf.php
